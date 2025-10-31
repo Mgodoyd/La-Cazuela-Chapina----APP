@@ -1,0 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'app_config.dart';
+
+final appConfigProvider = Provider<AppConfig>((ref) {
+  throw StateError('AppConfig no ha sido inicializado');
+});
+
