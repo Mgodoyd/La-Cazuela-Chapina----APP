@@ -74,7 +74,7 @@
 
 ## Requisitos
 
-- Flutter 3.x y Dart 3.x
+- Flutter y Dart 
 - Dependencias gestionadas por `flutter pub`
 - Editor recomendado: VSCode o Android Studio
 - Dispositivo físico o emulador (Android/iOS/Web)

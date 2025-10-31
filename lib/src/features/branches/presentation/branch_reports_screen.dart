@@ -20,11 +20,9 @@ class BranchReportsScreen extends ConsumerStatefulWidget {
 class _BranchReportsScreenState extends ConsumerState<BranchReportsScreen> {
   DateTimeRange? _range;
   bool _loading = false;
-  String? _errorMessage;
 
   int _ordersCount = 0;
   double _ordersTotal = 0;
-  double _salesTotal = 0;
 
   List<OrderModel> _allOrders = const [];
   List<SaleModel> _allSales = const [];
@@ -38,7 +36,6 @@ class _BranchReportsScreenState extends ConsumerState<BranchReportsScreen> {
   Future<void> _loadMetrics() async {
     setState(() {
       _loading = true;
-      _errorMessage = null;
     });
 
     List<OrderModel> orders = const [];
@@ -48,20 +45,16 @@ class _BranchReportsScreenState extends ConsumerState<BranchReportsScreen> {
       final ordersApi = ref.read(orderApiProvider);
       orders = await ordersApi.fetchOrders();
     } catch (error, stackTrace) {
-      _reportLoadError(
-        message: 'No se pudieron obtener las ordenes: $error',
-        stackTrace: stackTrace,
-      );
+      debugPrint('BranchReportsScreen: No se pudieron obtener las ordenes: $error');
+      debugPrint(stackTrace.toString());
     }
 
     try {
       final salesRepo = ref.read(saleRepositoryProvider);
       sales = await salesRepo.fetchSales();
     } catch (error, stackTrace) {
-      _reportLoadError(
-        message: 'No se pudieron obtener las ventas: $error',
-        stackTrace: stackTrace,
-      );
+      debugPrint('BranchReportsScreen: No se pudieron obtener las ventas: $error');
+      debugPrint(stackTrace.toString());
     }
 
     if (!mounted) return;
@@ -77,20 +70,8 @@ class _BranchReportsScreenState extends ConsumerState<BranchReportsScreen> {
       _allSales = sales;
       _ordersCount = metrics.ordersCount;
       _ordersTotal = metrics.ordersTotal;
-      _salesTotal = metrics.salesTotal;
       _loading = false;
     });
-  }
-
-  void _reportLoadError({
-    required String message,
-    StackTrace? stackTrace,
-  }) {
-    _errorMessage = message;
-    debugPrint('BranchReportsScreen: $message');
-    if (stackTrace != null) {
-      debugPrint(stackTrace.toString());
-    }
   }
 
   _Metrics _computeMetrics({
@@ -163,7 +144,6 @@ class _BranchReportsScreenState extends ConsumerState<BranchReportsScreen> {
       _range = picked;
       _ordersCount = metrics.ordersCount;
       _ordersTotal = metrics.ordersTotal;
-      _salesTotal = metrics.salesTotal;
     });
   }
 
